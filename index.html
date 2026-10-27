@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -406,26 +405,6 @@ tr:last-child td {
     }
 }
 
-/* Dark / Light Mode Switch */
-.navbar {
-    flex-wrap: wrap;
-}
-
-.theme-toggle {
-    margin-left: auto;
-    color: #e9ddff;
-    background: #251b45;
-    border: 1px solid #8b5cf6;
-    border-radius: 12px;
-    padding: 11px 15px;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-.theme-toggle:hover {
-    box-shadow: 0 0 18px #8b5cf655;
-}
-
 /* Light Theme */
 body.light-theme {
     --bg: #f1f5ff;
@@ -524,40 +503,741 @@ body.light-theme .secondary {
     border-color: #c4b5fd;
 }
 
-body.light-theme .theme-toggle {
-    background: #ffffff;
-    color: #4c1d95;
-    border-color: #a78bfa;
+/* ===== GradeWise Liquid Glass UI ===== */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.09);
+    --glass-border: rgba(255, 255, 255, 0.20);
+    --glass-highlight: rgba(255, 255, 255, 0.28);
+    --glass-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
+    --glass-text: #f7f8ff;
+    --glass-muted: #c2c8e5;
+    --glass-input: rgba(255, 255, 255, 0.07);
+    --glass-glow: rgba(135, 110, 255, 0.25);
 }
 
-@media (max-width: 420px) {
-    .theme-toggle {
-        margin-left: 0;
+body.light-theme {
+    --glass-bg: rgba(255, 255, 255, 0.58);
+    --glass-border: rgba(255, 255, 255, 0.72);
+    --glass-highlight: rgba(255, 255, 255, 0.92);
+    --glass-shadow: 0 12px 36px rgba(60, 70, 120, 0.12);
+    --glass-text: #20243b;
+    --glass-muted: #656b85;
+    --glass-input: rgba(255, 255, 255, 0.52);
+    --glass-glow: rgba(100, 80, 255, 0.15);
+}
+
+/* Cards and panels */
+.card,
+.calculator-card,
+.result-card,
+.stat-card,
+.subject-card,
+header,
+nav,
+section {
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(24px) saturate(165%);
+    backdrop-filter: blur(24px) saturate(165%);
+    border-radius: 24px;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+/* Main pill-shaped buttons */
+button,
+.btn,
+.calculate-btn,
+.reset-btn,
+.primary-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 12px 22px;
+    color: var(--glass-text);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.20),
+            rgba(255, 255, 255, 0.04) 55%,
+            var(--glass-glow)
+        );
+    box-shadow:
+        inset 0 1px 0 var(--glass-highlight),
+        0 8px 22px rgba(0, 0, 0, 0.12);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    backdrop-filter: blur(18px) saturate(180%);
+    cursor: pointer;
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        filter 0.22s ease;
+}
+
+/* Glossy reflection */
+button::before,
+.btn::before,
+.calculate-btn::before,
+.reset-btn::before,
+.primary-btn::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: -120%;
+    width: 75%;
+    height: 100%;
+    background: linear-gradient(
+        110deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+}
+
+button:hover::before,
+.btn:hover::before,
+.calculate-btn:hover::before,
+.reset-btn:hover::before,
+.primary-btn:hover::before {
+    left: 150%;
+}
+
+button:hover,
+.btn:hover,
+.calculate-btn:hover,
+.reset-btn:hover,
+.primary-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--glass-highlight);
+    box-shadow:
+        inset 0 1px 0 var(--glass-highlight),
+        0 0 24px var(--glass-glow),
+        0 12px 28px rgba(0, 0, 0, 0.14);
+    filter: brightness(1.08);
+}
+
+button:active,
+.btn:active,
+.calculate-btn:active,
+.reset-btn:active,
+.primary-btn:active {
+    transform: scale(0.96);
+    filter: brightness(0.97);
+}
+
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid rgba(145, 125, 255, 0.9);
+    outline-offset: 3px;
+}
+
+/* Small circular bubble controls */
+.circle-btn,
+.icon-btn,
+.small-control {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Inputs and dropdowns */
+input,
+select,
+textarea {
+    color: var(--glass-text);
+    background: var(--glass-input);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    transition:
+        border-color 0.22s ease,
+        box-shadow 0.22s ease,
+        background-color 0.22s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--glass-muted);
+    opacity: 0.85;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: rgba(145, 125, 255, 0.9);
+    box-shadow:
+        0 0 0 3px var(--glass-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Tables and subject rows */
+table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+th,
+td {
+    border-color: var(--glass-border);
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background: var(--glass-glow);
+}
+
+/* Theme-aware text */
+body.light-theme {
+    color: var(--glass-text);
+}
+
+body.light-theme p,
+body.light-theme label,
+body.light-theme small {
+    color: var(--glass-muted);
+}
+
+/* Touchscreens: retain press feedback without hover effects */
+@media (hover: none) {
+    button:hover,
+    .btn:hover,
+    .calculate-btn:hover,
+    .reset-btn:hover,
+    .primary-btn:hover {
+        transform: none;
+        filter: none;
+    }
+
+    button:active,
+    .btn:active {
+        transform: scale(0.96);
     }
 }
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== GradeWise custom glowing mouse cursor ===== */
+
+@media (hover: hover) and (pointer: fine) {
+    body,
+    a,
+    button,
+    input,
+    select,
+    textarea {
+        cursor: none !important;
+    }
+
+    .cursor-glow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle,
+            rgba(139, 92, 246, 0.12) 0%,
+            rgba(34, 211, 238, 0.05) 35%,
+            transparent 70%
+        );
+        pointer-events: none;
+        z-index: 9997;
+        will-change: transform;
+    }
+
+    .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #fff;
+        pointer-events: none;
+        z-index: 9999;
+        box-shadow:
+            0 0 6px rgba(139, 92, 246, 0.9),
+            0 0 12px rgba(139, 92, 246, 0.5);
+        mix-blend-mode: difference;
+        will-change: transform;
+    }
+
+    .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        border: 1.5px solid rgba(139, 92, 246, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.25);
+        transition:
+            width 0.18s ease,
+            height 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease;
+        will-change: transform;
+    }
+
+    body.cursor-hover .cursor-dot {
+        width: 12px;
+        height: 12px;
+        background: #a78bfa;
+        box-shadow: 0 0 14px #8b5cf6, 0 0 28px #8b5cf6;
+    }
+
+    body.cursor-hover .cursor-ring {
+        width: 52px;
+        height: 52px;
+        border-color: rgba(34, 211, 238, 0.9);
+        box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+    }
+
+    body.cursor-click .cursor-dot {
+        width: 6px;
+        height: 6px;
+        background: #22d3ee;
+    }
+
+    body.cursor-click .cursor-ring {
+        width: 28px;
+        height: 28px;
+        border-color: #22d3ee;
+    }
+}
+
+/* Keep the normal cursor on touchscreens */
+@media (hover: none), (pointer: coarse) {
+    .cursor-glow,
+    .cursor-dot,
+    .cursor-ring {
+        display: none !important;
+    }
+}
+
+
+/* ===== Separate Floating Cards ===== */
+
+.stat {
+    position: relative;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .stat:hover {
+        transform: translateY(-8px) scale(1.025);
+        border-color: rgba(139, 92, 246, 0.65);
+        box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.25),
+            0 0 24px rgba(139, 92, 246, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Each subject row floats separately */
+    tbody tr {
+        transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    tbody tr:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.12);
+    }
+
+    /* Main cards glow without large tilting */
+    .card {
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+        border-color: rgba(96, 165, 250, 0.4);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stat,
+    tbody tr,
+    .card {
+        transition: none;
+    }
+}
+
+/* ===== Extra Curved Liquid Glass UI ===== */
+
+.card,
+.stat,
+.result-card {
+    border-radius: 30px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.stat {
+    border-radius: 26px;
+    padding: 22px;
+}
+
+input,
+select,
+textarea {
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: rgba(34, 211, 238, 0.75);
+    box-shadow:
+        0 0 0 4px rgba(34, 211, 238, 0.10),
+        0 0 20px rgba(34, 211, 238, 0.12);
+}
+
+button {
+    border-radius: 999px;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.20);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.table-wrap {
+    border-radius: 24px;
+    overflow: auto;
+}
+
+th:first-child {
+    border-top-left-radius: 18px;
+}
+
+th:last-child {
+    border-top-right-radius: 18px;
+}
+
+.setup-field input {
+    border-radius: 18px;
+}
+
+@media (max-width: 600px) {
+    .card {
+        border-radius: 25px;
+        padding: 20px;
+    }
+
+    .stat {
+        border-radius: 23px;
+    }
+
+    .table-wrap {
+        border-radius: 20px;
+    }
+}
+
+
+/* =====================================================
+   VibeX Glass Containers (header + hero + all cards)
+   ===================================================== */
+.navbar,
+.hero,
+.card,
+.stat,
+.result-card,
+.message-card {
+    position: relative;
+    background: rgba(13, 19, 36, 0.72);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 30px;
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(139, 92, 246, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    backdrop-filter: blur(20px) saturate(170%);
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Header and hero get real inner spacing like the other cards */
+.navbar {
+    padding: 16px 22px;
+    margin-bottom: 22px;
+}
+
+.hero {
+    padding: 28px 28px 30px;
+    margin-bottom: 22px;
+}
+
+.hero h1 {
+    margin-top: 0;
+}
+
+/* purple to cyan hairline on top of every container */
+.navbar::before,
+.hero::before,
+.card::before,
+.stat::before,
+.result-card::before,
+.message-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 18%;
+    right: 18%;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, #8b5cf6, #22d3ee, transparent);
+    pointer-events: none;
+}
+
+/* hover glow */
+@media (hover: hover) and (pointer: fine) {
+    .navbar:hover,
+    .hero:hover,
+    .card:hover,
+    .stat:hover,
+    .result-card:hover,
+    .message-card:hover {
+        border-color: #22d3ee;
+        box-shadow:
+            0 18px 46px rgba(0, 0, 0, 0.55),
+            0 0 34px rgba(34, 211, 238, 0.28),
+            0 0 18px rgba(139, 92, 246, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* The stats wrapper is only a layout grid: no box around the 3 cards */
+.stats {
+    background: none;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* grid display was overriding the hidden attribute */
+.stats[hidden] {
+    display: none;
+}
+
+.table-wrap {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* light theme */
+body.light-theme .navbar,
+body.light-theme .hero,
+body.light-theme .card,
+body.light-theme .stat,
+body.light-theme .result-card,
+body.light-theme .message-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow:
+        0 14px 40px rgba(60, 70, 120, 0.18),
+        0 0 24px rgba(139, 92, 246, 0.12);
+}
+
+body.light-theme .hero p {
+    color: #625f80;
+}
+
+@media (max-width: 600px) {
+    .navbar,
+    .hero {
+        border-radius: 25px;
+    }
+
+    .navbar {
+        padding: 14px 16px;
+    }
+
+    .hero {
+        padding: 22px 18px 24px;
+    }
+}
+
+
+/* =====================================================
+   Light / Dark switch at the bottom of the screen
+   ===================================================== */
+body {
+    padding-bottom: 100px;
+}
+
+.theme-fab {
+    position: fixed;
+    left: 50%;
+    margin-left: -38px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+    z-index: 9990;
+    width: auto;
+    height: 54px;
+    min-width: 76px;
+    padding: 0 18px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight:600;
+    line-height: 1;
+    color: #fff;
+    background: rgba(13, 19, 36, 0.72);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(139, 92, 246, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    backdrop-filter: blur(20px) saturate(170%);
+}
+
+.theme-fab:hover {
+    transform: translateY(-4px) scale(1.08);
+    border-color: #22d3ee;
+    box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(34, 211, 238, 0.4),
+        0 0 16px rgba(139, 92, 246, 0.3);
+}
+
+.theme-fab:active {
+    transform: scale(0.93);
+}
+
+body.light-theme .theme-fab {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow:
+        0 14px 40px rgba(60, 70, 120, 0.22),
+        0 0 24px rgba(139, 92, 246, 0.16);
+}
+/* Fix text visibility in Light Mode */
+body.light-theme {
+    color: #1f2937;
+}
+
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme p,
+body.light-theme label,
+body.light-theme .stat p,
+body.light-theme .stat h3,
+body.light-theme th,
+body.light-theme td {
+    color: #1f2937;
+}
+
+/* Make form text visible */
+body.light-theme input,
+body.light-theme select,
+body.light-theme textarea {
+    color: #1f2937;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* Placeholder text */
+body.light-theme input::placeholder,
+body.light-theme textarea::placeholder {
+    color: #6b7280;
+}
+
+/* Fix Light/Dark switch text visibility */
+body.light-theme .theme-fab {
+    color: #111111 !important;
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+}
+
+body:not(.light-theme) .theme-fab {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
 <div class="container">
 
-    
 <header class="navbar">
     <div class="logo">🎓</div>
     <div>
         <h2 class="brand">GradeWise</h2>
         <div class="subtitle">Your academic companion</div>
     </div>
-
-    <button
-        class="theme-toggle"
-        id="themeToggle"
-        type="button"
-        onclick="toggleTheme()"
-        aria-label="Switch to light mode"
-        title="Switch theme">
-        ☀️ Light Mode
-    </button>
 </header>
 
 
@@ -645,6 +1325,15 @@ body.light-theme .theme-toggle {
         GradeWise · Study smart, aim higher.
     </footer>
 </div>
+
+<!-- Light / Dark switch (bottom center) -->
+<button
+    class="theme-fab"
+    id="themeToggle"
+    type="button"
+    onclick="toggleTheme()"
+    aria-label="Switch to light mode"
+    title="Switch to light mode">Light☀️</button>
 
 <script>
 function createTable() {
@@ -881,11 +1570,13 @@ function applyTheme(isLight) {
     const button = document.getElementById("themeToggle");
 
     if (isLight) {
-        button.textContent = "🌙 Dark Mode";
+        button.textContent = "Dark🌙";
         button.setAttribute("aria-label", "Switch to dark mode");
+        button.title = "Switch to dark mode";
     } else {
-        button.textContent = "☀️ Light Mode";
+        button.textContent = "Light ☀️";
         button.setAttribute("aria-label", "Switch to light mode");
+        button.title = "Switch to light mode";
     }
 }
 
@@ -907,6 +1598,132 @@ try {
 } catch (error) {
     applyTheme(false);
 }
+
+/* ===== Custom cursor movement ===== */
+(() => {
+    const finePointer = window.matchMedia(
+        "(hover: hover) and (pointer: fine)"
+    );
+
+    if (!finePointer.matches) return;
+
+    const dot = document.querySelector(".cursor-dot");
+    const ring = document.querySelector(".cursor-ring");
+    const glow = document.querySelector(".cursor-glow");
+
+    if (!dot || !ring || !glow) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    function moveDot(element, x, y) {
+        element.style.transform =
+            `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    }
+
+    document.addEventListener("mousemove", (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        moveDot(dot, mouseX, mouseY);
+        moveDot(glow, mouseX, mouseY);
+    });
+
+    function animateRing() {
+        ringX += (mouseX - ringX) * 0.22;
+        ringY += (mouseY - ringY) * 0.22;
+
+        moveDot(ring, ringX, ringY);
+        requestAnimationFrame(animateRing);
+    }
+
+    animateRing();
+
+    document.addEventListener("mouseover", (event) => {
+        if (event.target.closest(
+            "a, button, input, select, textarea, [role='button']"
+        )) {
+            document.body.classList.add("cursor-hover");
+        }
+    });
+
+    document.addEventListener("mouseout", (event) => {
+        if (
+            event.target.closest(
+                "a, button, input, select, textarea, [role='button']"
+            ) &&
+            !event.relatedTarget?.closest(
+                "a, button, input, select, textarea, [role='button']"
+            )
+        ) {
+            document.body.classList.remove("cursor-hover");
+        }
+    });
+
+    document.addEventListener("mousedown", () => {
+        document.body.classList.add("cursor-click");
+    });
+
+    document.addEventListener("mouseup", () => {
+        document.body.classList.remove("cursor-click");
+    });
+
+    window.addEventListener("blur", () => {
+        document.body.classList.remove("cursor-hover", "cursor-click");
+    });
+})();
+
+
+/* ===== Floating effect for all page sections ===== */
+(() => {
+    const selector = [
+        "header",
+        "section",
+        "main",
+        "footer",
+        "article",
+        ".card",
+        ".calculator-card",
+        ".result-card",
+        ".stat-card",
+        ".subject-card"
+    ].join(",");
+
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        return;
+    }
+
+    document.querySelectorAll(selector).forEach((element) => {
+        // Avoid tilting layout containers (the stats grid is only a wrapper).
+        if (
+            element.matches("main, footer, .stats") ||
+            element.offsetWidth > 1100 ||
+            element.offsetHeight > 850
+        ) {
+            return;
+        }
+
+        element.addEventListener("pointermove", (event) => {
+            const rect = element.getBoundingClientRect();
+
+            const x = (event.clientX - rect.left) / rect.width;
+            const y = (event.clientY - rect.top) / rect.height;
+
+            const tiltY = (x - 0.5) * 4;
+            const tiltX = (0.5 - y) * 4;
+
+            element.style.transform =
+                `perspective(1000px) translateY(-4px) ` +
+                `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        });
+
+        element.addEventListener("pointerleave", () => {
+            element.style.removeProperty("transform");
+        });
+    });
+})();
 </script>
 </body>
 </html>
