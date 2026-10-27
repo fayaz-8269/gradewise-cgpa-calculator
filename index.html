@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeWise | CGPA Calculator</title>
+
+<style>
+:root {
+    --bg: #080816;
+    --card: rgba(24, 24, 52, 0.78);
+    --input: #111128;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --cyan: #22d3ee;
+    --text: #f1f5f9;
+    --muted: #a5a5c5;
+    --border: rgba(139, 92, 246, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 30px 16px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(ellipse at 10% 10%, #25144e, transparent 40%),
+        radial-gradient(ellipse at 90% 80%, #102e50, transparent 40%),
+        var(--bg);
+    background-attachment: fixed;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 42px;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    font-size: 26px;
+    box-shadow: 0 0 30px #8b5cf644;
+}
+
+.brand {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 0.5px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.hero {
+    margin-bottom: 28px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    letter-spacing: -1.5px;
+    margin: 0 0 12px;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg, #a78bfa, #60a5fa, #22d3ee);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-size: 200% auto;
+    animation: gradientMove 5s linear infinite;
+}
+
+.hero p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+}
+
+@keyframes gradientMove {
+    to { background-position: 200% center; }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    background: var(--card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 18px 50px #00000030;
+}
+
+.card h2 {
+    margin: 0 0 20px;
+    font-size: 19px;
+}
+
+label {
+    display: block;
+    color: #d4d4ef;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+input {
+    width: 100%;
+    min-width: 0;
+    background: var(--input);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 11px;
+    padding: 12px;
+    font: inherit;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px #8b5cf633;
+}
+
+.setup-row {
+    display: flex;
+    align-items: end;
+    gap: 15px;
+}
+
+.setup-field {
+    width: 180px;
+    max-width: 100%;
+}
+
+button {
+    border: 0;
+    border-radius: 11px;
+    padding: 13px 20px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+}
+
+.primary {
+    color: white;
+    background: linear-gradient(110deg, #7c3aed, #2563eb);
+    box-shadow: 0 5px 20px #7c3aed30;
+}
+
+.secondary {
+    color: #ddd6fe;
+    background: #252044;
+    border: 1px solid #51417e;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
+
+table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 13px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: #211c40;
+    color: #c4b5fd;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    background: #101025aa;
+}
+
+td input {
+    padding: 10px;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.subject-label {
+    display: block;
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.actions button {
+    flex: 1;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.stat {
+    background: #15132b;
+    border: 1px solid var(--border);
+    padding: 19px;
+    border-radius: 16px;
+}
+
+.stat p {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 0 0 12px;
+}
+
+.stat h3 {
+    font-size: clamp(21px, 4vw, 29px);
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.result-card {
+    display: none;
+    text-align: center;
+    border-color: #6d4bc0;
+    background: linear-gradient(135deg, #211742, #10203d);
+}
+
+.result-card h2 {
+    color: #ddd6fe;
+    margin-bottom: 12px;
+}
+
+.cgpa-value {
+    font-size: clamp(48px, 10vw, 72px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    background: linear-gradient(90deg, #a78bfa, #60a5fa, #22d3ee);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.result-message {
+    color: #ddd6fe;
+    margin: 10px 0 0;
+    line-height: 1.7;
+}
+
+.message-card {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.message-card h2 {
+    margin-bottom: 10px;
+}
+
+.message-card p {
+    color: #d4d4ef;
+    line-height: 1.8;
+}
+
+.level {
+    display: inline-block;
+    border-radius: 30px;
+    padding: 7px 14px;
+    background: #8b5cf626;
+    border: 1px solid #8b5cf655;
+    color: #c4b5fd;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.target-box {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 14px;
+    text-align: left;
+    background: #11152c;
+    border: 1px solid #3b82f644;
+}
+
+.target-box h3 {
+    margin: 0 0 8px;
+    color: #93c5fd;
+    font-size: 15px;
+}
+
+.target-box p {
+    margin: 0;
+}
+
+.error {
+    color: #fda4af;
+    font-size: 14px;
+    margin-top: 14px;
+    line-height: 1.6;
+}
+
+.footer {
+    text-align: center;
+    color: #777795;
+    font-size: 12px;
+    padding: 20px 0;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 23px 12px;
+    }
+
+    .navbar {
+        margin-bottom: 30px;
+    }
+
+    .card {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .setup-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .setup-field {
+        width: 100%;
+    }
+
+    .setup-row button {
+        width: 100%;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat {
+        padding: 15px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <header class="navbar">
+        <div class="logo">🎓</div>
+        <div>
+            <h2 class="brand">GradeWise</h2>
+            <div class="subtitle">Your academic companion</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Calculate your <span>success.</span></h1>
+        <p>Enter your marks and subject credits to calculate your weighted grade-point average.</p>
+    </section>
+
+    <section class="card">
+        <h2>⚙️ Set up your semester</h2>
+        <div class="setup-row">
+            <div class="setup-field">
+                <label for="subjectCount">NUMBER OF SUBJECTS</label>
+                <input type="number" id="subjectCount"
+                       min="1" max="30" step="1"
+                       placeholder="e.g. 6">
+            </div>
+            <button class="primary" onclick="createTable()">
+                + Create Subjects
+            </button>
+        </div>
+        <div id="setupError" class="error" role="alert"></div>
+    </section>
+
+    <section class="card" id="subjectsCard" hidden>
+        <h2>📚 Enter subject details</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Internal / 50</th>
+                        <th>Semester / 100</th>
+                        <th>Credits</th>
+                    </tr>
+                </thead>
+                <tbody id="subjectTable"></tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="primary" onclick="calculateCGPA()">
+                Calculate CGPA →
+            </button>
+            <button class="secondary" onclick="resetCalculator()">
+                Reset
+            </button>
+        </div>
+        <div id="formError" class="error" role="alert"></div>
+    </section>
+
+    <section class="card result-card" id="resultCard" aria-live="polite">
+        <h2>Your semester result</h2>
+        <div class="cgpa-value" id="cgpaValue">0.00</div>
+        <p class="result-message" id="resultMessage"></p>
+    </section>
+
+    <section class="card message-card" id="messageCard" aria-live="polite">
+        <h2 id="messageTitle">Your performance</h2>
+        <div class="level" id="messageLevel"></div>
+        <p id="motivationMessage"></p>
+
+        <div class="target-box">
+            <h3 id="targetTitle">🎯 Your next target</h3>
+            <p id="targetMessage"></p>
+        </div>
+    </section>
+
+    <section class="stats" id="stats" hidden>
+        <div class="stat">
+            <p>TOTAL CREDITS</p>
+            <h3 id="totalCredits">0</h3>
+        </div>
+        <div class="stat">
+            <p>WEIGHTED POINTS</p>
+            <h3 id="weightedPoints">0</h3>
+        </div>
+        <div class="stat">
+            <p>SUBJECTS</p>
+            <h3 id="totalSubjects">0</h3>
+        </div>
+    </section>
+
+    <footer class="footer">
+        GradeWise · Study smart, aim higher.
+    </footer>
+</div>
+
+<script>
+function createTable() {
+    const countInput = document.getElementById("subjectCount");
+    const n = Number(countInput.value);
+    const error = document.getElementById("setupError");
+
+    error.textContent = "";
+
+    if (!Number.isInteger(n) || n < 1 || n > 30) {
+        error.textContent = "Enter a whole number between 1 and 30.";
+        return;
+    }
+
+    let rows = "";
+
+    for (let i = 0; i < n; i++) {
+        rows += `
+        <tr>
+            <td>
+                <span class="subject-label">SUB ${i + 1}</span>
+                <input type="text" id="name${i}"
+                       aria-label="Subject ${i + 1} name"
+                       placeholder="Subject name">
+            </td>
+            <td>
+                <input type="number" id="internal${i}"
+                       aria-label="Subject ${i + 1} internal marks"
+                       min="0" max="50" step="any"
+                       placeholder="0–50">
+            </td>
+            <td>
+                <input type="number" id="sem${i}"
+                       aria-label="Subject ${i + 1} semester marks"
+                       min="0" max="100" step="any"
+                       placeholder="0–100">
+            </td>
+            <td>
+                <input type="number" id="credit${i}"
+                       aria-label="Subject ${i + 1} credits"
+                       min="0.01" max="100" step="any"
+                       placeholder="Credits">
+            </td>
+        </tr>`;
+    }
+
+    document.getElementById("subjectTable").innerHTML = rows;
+    document.getElementById("subjectsCard").hidden = false;
+    document.getElementById("formError").textContent = "";
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("messageCard").style.display = "none";
+    document.getElementById("stats").hidden = true;
+}
+
+function calculateCGPA() {
+    const n = Number(document.getElementById("subjectCount").value);
+    const error = document.getElementById("formError");
+    error.textContent = "";
+
+    let totalCredits = 0;
+    let weightedPoints = 0;
+
+    for (let i = 0; i < n; i++) {
+        const internalField = document.getElementById(`internal${i}`);
+        const semField = document.getElementById(`sem${i}`);
+        const creditField = document.getElementById(`credit${i}`);
+
+        const internal = internalField.value.trim() === ""
+            ? NaN : Number(internalField.value);
+        const sem = semField.value.trim() === ""
+            ? NaN : Number(semField.value);
+        const credit = creditField.value.trim() === ""
+            ? NaN : Number(creditField.value);
+
+        if (!Number.isFinite(internal) ||
+            internal < 0 || internal > 50) {
+            error.textContent =
+                `Subject ${i + 1}: internal marks must be between 0 and 50.`;
+            internalField.focus();
+            return;
+        }
+
+        if (!Number.isFinite(sem) || sem < 0 || sem > 100) {
+            error.textContent =
+                `Subject ${i + 1}: semester marks must be between 0 and 100.`;
+            semField.focus();
+            return;
+        }
+
+        if (!Number.isFinite(credit) || credit <= 0) {
+            error.textContent =
+                `Subject ${i + 1}: enter credits greater than zero.`;
+            creditField.focus();
+            return;
+        }
+
+        // Original marks formula preserved.
+        const total = internal + (sem / 2);
+
+        let gradePoint;
+
+        if (total >= 90 && total <= 100)
+            gradePoint = 10;
+        else if (total >= 80)
+            gradePoint = 9;
+        else if (total >= 70)
+            gradePoint = 8;
+        else if (total >= 60)
+            gradePoint = 7;
+        else if (total >= 50)
+            gradePoint = 6;
+        else if (total >= 40)
+            gradePoint = 5;
+        else
+            gradePoint = 0;
+
+        totalCredits += credit;
+        weightedPoints += credit * gradePoint;
+    }
+
+    if (totalCredits <= 0) {
+        error.textContent = "Total credits must be greater than zero.";
+        return;
+    }
+
+    const cgpa = weightedPoints / totalCredits;
+
+    document.getElementById("cgpaValue").textContent =
+        cgpa.toFixed(2);
+
+    document.getElementById("resultMessage").textContent =
+        "Your weighted grade-point average is calculated from your subject credits.";
+
+    document.getElementById("totalCredits").textContent =
+        Number(totalCredits.toFixed(2)).toString();
+
+    document.getElementById("weightedPoints").textContent =
+        Number(weightedPoints.toFixed(2)).toString();
+
+    document.getElementById("totalSubjects").textContent = n;
+
+    showPerformanceMessage(cgpa);
+
+    document.getElementById("resultCard").style.display = "block";
+    document.getElementById("messageCard").style.display = "block";
+    document.getElementById("stats").hidden = false;
+
+    document.getElementById("resultCard").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+function showPerformanceMessage(cgpa) {
+    const level = document.getElementById("messageLevel");
+    const title = document.getElementById("messageTitle");
+    const message = document.getElementById("motivationMessage");
+    const targetTitle = document.getElementById("targetTitle");
+    const targetMessage = document.getElementById("targetMessage");
+
+    if (cgpa >= 9) {
+        level.textContent = "🏆 OUTSTANDING";
+        title.textContent = "Amazing performance!";
+        message.textContent =
+            "Outstanding! 🌟 You're performing at an excellent level. Keep up the amazing work and continue aiming high.";
+        targetTitle.textContent = "🎯 Maintain your excellence";
+        targetMessage.textContent =
+            "Your result is already in the 9+ range. Stay consistent and aim to maintain your performance.";
+    } else if (cgpa >= 8) {
+        level.textContent = "🥇 EXCELLENT";
+        title.textContent = "You're doing great!";
+        message.textContent =
+            "Excellent work! 💜 You're very close to the top. Stay consistent and push towards a 9+ result.";
+        targetTitle.textContent = "🎯 Your next target: 9.00";
+        targetMessage.textContent =
+            "Strengthen difficult topics, practise regularly, and review mistakes to work towards 9.00.";
+    } else if (cgpa >= 7) {
+        level.textContent = "🚀 VERY GOOD";
+        title.textContent = "Good progress!";
+        message.textContent =
+            "Good progress! Strengthen your difficult subjects and keep practising. Your next goal is 8+.";
+        targetTitle.textContent = "🎯 Your next target: 8.00";
+        targetMessage.textContent =
+            "Make a weekly revision plan and spend extra time on the subjects where you lose marks.";
+    } else if (cgpa >= 6) {
+        level.textContent = "📚 GOOD PROGRESS";
+        title.textContent = "Keep building your skills!";
+        message.textContent =
+            "You're making progress! Focus on understanding concepts, revise regularly, and work towards a 7+ result.";
+        targetTitle.textContent = "🎯 Your next target: 7.00";
+        targetMessage.textContent =
+            "Practise important questions, revise class notes, and clear doubts early.";
+    } else if (cgpa >= 5) {
+        level.textContent = "💪 ROOM TO IMPROVE";
+        title.textContent = "Every step counts!";
+        message.textContent =
+            "Don't give up! Create a daily study plan, practise important questions, and take one step towards better results every day.";
+        targetTitle.textContent = "🎯 Your next target: 6.00";
+        targetMessage.textContent =
+            "Start with short, focused study sessions and practise the topics you find most difficult.";
+    } else if (cgpa >= 4) {
+        level.textContent = "❤️ KEEP GOING";
+        title.textContent = "You can improve!";
+        message.textContent =
+            "Every improvement starts somewhere. Identify your weak subjects, ask for help when needed, and build better study habits.";
+        targetTitle.textContent = "🎯 Your next target: 5.00";
+        targetMessage.textContent =
+            "Review the basics, seek guidance from your teachers, and make a realistic study timetable.";
+    } else {
+        level.textContent = "🌱 START SMALL";
+        title.textContent = "Your next step matters!";
+        message.textContent =
+            "This result suggests you may need more support. Don't lose hope. Review the basics, ask for help, and make a steady study plan.";
+        targetTitle.textContent = "🎯 Build your foundation";
+        targetMessage.textContent =
+            "Focus on understanding each subject and check your college's minimum passing requirements.";
+    }
+}
+
+function resetCalculator() {
+    document.getElementById("subjectCount").value = "";
+    document.getElementById("subjectTable").innerHTML = "";
+    document.getElementById("subjectsCard").hidden = true;
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("messageCard").style.display = "none";
+    document.getElementById("stats").hidden = true;
+    document.getElementById("setupError").textContent = "";
+    document.getElementById("formError").textContent = "";
+}
+</script>
+</body>
+</html>
