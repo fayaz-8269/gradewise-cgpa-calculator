@@ -405,19 +405,161 @@ tr:last-child td {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* Dark / Light Mode Switch */
+.navbar {
+    flex-wrap: wrap;
+}
+
+.theme-toggle {
+    margin-left: auto;
+    color: #e9ddff;
+    background: #251b45;
+    border: 1px solid #8b5cf6;
+    border-radius: 12px;
+    padding: 11px 15px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.theme-toggle:hover {
+    box-shadow: 0 0 18px #8b5cf655;
+}
+
+/* Light Theme */
+body.light-theme {
+    --bg: #f1f5ff;
+    --card: rgba(255, 255, 255, 0.88);
+    --input: #ffffff;
+    --text: #1e1b4b;
+    --muted: #625f80;
+    --border: rgba(109, 70, 190, 0.23);
+
+    background:
+        radial-gradient(ellipse at 10% 10%, #e4d9ff, transparent 40%),
+        radial-gradient(ellipse at 90% 80%, #dbeafe, transparent 40%),
+        var(--bg);
+
+    color: var(--text);
+}
+
+/* Cards and text in light mode */
+body.light-theme .card {
+    background: var(--card);
+    border-color: var(--border);
+    box-shadow: 0 12px 35px #43308012;
+}
+
+body.light-theme .hero p,
+body.light-theme .subtitle,
+body.light-theme .stat p,
+body.light-theme .footer {
+    color: var(--muted);
+}
+
+body.light-theme label {
+    color: #37305b;
+}
+
+body.light-theme input {
+    background: var(--input);
+    color: #1e1b4b;
+    border-color: var(--border);
+}
+
+body.light-theme .table-wrap {
+    border-color: var(--border);
+}
+
+body.light-theme th {
+    background: #e9e3ff;
+    color: #4c1d95;
+}
+
+body.light-theme td {
+    background: #ffffff;
+    border-color: #e5e0f2;
+}
+
+body.light-theme .stat {
+    background: #ffffff;
+    border-color: var(--border);
+}
+
+body.light-theme .result-card {
+    background: linear-gradient(135deg, #ede9fe, #dbeafe);
+    border-color: #a78bfa;
+}
+
+body.light-theme .result-card h2 {
+    color: #4c1d95;
+}
+
+body.light-theme .result-message {
+    color: #4b4569;
+}
+
+body.light-theme .message-card p {
+    color: #37305b;
+}
+
+body.light-theme .level {
+    background: #ede9fe;
+    border-color: #c4b5fd;
+    color: #5b21b6;
+}
+
+body.light-theme .target-box {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+body.light-theme .target-box h3 {
+    color: #1d4ed8;
+}
+
+body.light-theme .secondary {
+    background: #ede9fe;
+    color: #4c1d95;
+    border-color: #c4b5fd;
+}
+
+body.light-theme .theme-toggle {
+    background: #ffffff;
+    color: #4c1d95;
+    border-color: #a78bfa;
+}
+
+@media (max-width: 420px) {
+    .theme-toggle {
+        margin-left: 0;
+    }
+}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-    <header class="navbar">
-        <div class="logo">🎓</div>
-        <div>
-            <h2 class="brand">GradeWise</h2>
-            <div class="subtitle">Your academic companion</div>
-        </div>
-    </header>
+    
+<header class="navbar">
+    <div class="logo">🎓</div>
+    <div>
+        <h2 class="brand">GradeWise</h2>
+        <div class="subtitle">Your academic companion</div>
+    </div>
+
+    <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Switch to light mode"
+        title="Switch theme">
+        ☀️ Light Mode
+    </button>
+</header>
+
 
     <section class="hero">
         <h1>Calculate your <span>success.</span></h1>
@@ -731,6 +873,39 @@ function resetCalculator() {
     document.getElementById("stats").hidden = true;
     document.getElementById("setupError").textContent = "";
     document.getElementById("formError").textContent = "";
+}
+
+function applyTheme(isLight) {
+    document.body.classList.toggle("light-theme", isLight);
+
+    const button = document.getElementById("themeToggle");
+
+    if (isLight) {
+        button.textContent = "🌙 Dark Mode";
+        button.setAttribute("aria-label", "Switch to dark mode");
+    } else {
+        button.textContent = "☀️ Light Mode";
+        button.setAttribute("aria-label", "Switch to light mode");
+    }
+}
+
+function toggleTheme() {
+    const isLight = !document.body.classList.contains("light-theme");
+
+    applyTheme(isLight);
+
+    try {
+        localStorage.setItem("gradewise-theme", isLight ? "light" : "dark");
+    } catch (error) {
+        // Theme switching still works if storage is unavailable.
+    }
+}
+
+// Restore the previously selected theme when the page opens.
+try {
+    applyTheme(localStorage.getItem("gradewise-theme") === "light");
+} catch (error) {
+    applyTheme(false);
 }
 </script>
 </body>
