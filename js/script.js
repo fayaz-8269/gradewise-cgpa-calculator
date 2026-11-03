@@ -1,3 +1,38 @@
+// AIML 5th Semester subjects. Professional elective is one combined row.
+const semesterSubjects = {
+    aiml: {
+        "5": [
+            { name: "Entrepreneurship, Management & Finance", credits: 3 },
+            { name: "Database Management Systems", credits: 4 },
+            { name: "Computer Networks", credits: 3 },
+            { name: "Mathematics for Artificial Intelligence", credits: 3 },
+            { name: "Computer Networks Laboratory", credits: 2 },
+            { name: "Machine Learning Operations / Full Stack Development", credits: 3 },
+            { name: "Open Elective", credits: 3 }
+        ]
+    }
+};
+
+function loadSemesterSubjects() {
+    const branch = document.getElementById("branchSelect").value;
+    const semester = document.getElementById("semesterSelect").value;
+    const subjects = semesterSubjects[branch]?.[semester];
+    const error = document.getElementById("setupError");
+
+    error.textContent = "";
+    if (!subjects) {
+        error.textContent = "Subjects are not available for this selection yet.";
+        return;
+    }
+
+    document.getElementById("subjectCount").value = subjects.length;
+    createTable();
+
+    subjects.forEach((subject, index) => {
+        document.getElementById(`name${index}`).value = subject.name;
+        document.getElementById(`credit${index}`).value = subject.credits;
+    });
+}
 
 function createTable() {
     const countInput = document.getElementById("subjectCount");
@@ -50,7 +85,6 @@ function createTable() {
     document.getElementById("messageCard").style.display = "none";
     document.getElementById("stats").hidden = true;
 }
-
 function calculateCGPA() {
     const n = Number(document.getElementById("subjectCount").value);
     const error = document.getElementById("formError");
@@ -66,13 +100,14 @@ function calculateCGPA() {
 
         const internal = internalField.value.trim() === ""
             ? NaN : Number(internalField.value);
+
         const sem = semField.value.trim() === ""
             ? NaN : Number(semField.value);
+
         const credit = creditField.value.trim() === ""
             ? NaN : Number(creditField.value);
 
-        if (!Number.isFinite(internal) ||
-            internal < 0 || internal > 50) {
+        if (!Number.isFinite(internal) || internal < 0 || internal > 50) {
             error.textContent =
                 `Subject ${i + 1}: internal marks must be between 0 and 50.`;
             internalField.focus();
@@ -93,25 +128,16 @@ function calculateCGPA() {
             return;
         }
 
-        // Original marks formula preserved.
         const total = internal + (sem / 2);
-
         let gradePoint;
 
-        if (total >= 90 && total <= 100)
-            gradePoint = 10;
-        else if (total >= 80)
-            gradePoint = 9;
-        else if (total >= 70)
-            gradePoint = 8;
-        else if (total >= 60)
-            gradePoint = 7;
-        else if (total >= 50)
-            gradePoint = 6;
-        else if (total >= 40)
-            gradePoint = 5;
-        else
-            gradePoint = 0;
+        if (total >= 90) gradePoint = 10;
+        else if (total >= 80) gradePoint = 9;
+        else if (total >= 70) gradePoint = 8;
+        else if (total >= 60) gradePoint = 7;
+        else if (total >= 50) gradePoint = 6;
+        else if (total >= 40) gradePoint = 5;
+        else gradePoint = 0;
 
         totalCredits += credit;
         weightedPoints += credit * gradePoint;
@@ -124,8 +150,7 @@ function calculateCGPA() {
 
     const cgpa = weightedPoints / totalCredits;
 
-    document.getElementById("cgpaValue").textContent =
-        cgpa.toFixed(2);
+    document.getElementById("cgpaValue").textContent = cgpa.toFixed(2);
 
     document.getElementById("resultMessage").textContent =
         "Your weighted grade-point average is calculated from your subject credits.";
@@ -232,6 +257,8 @@ function applyTheme(isLight) {
 
     const button = document.getElementById("themeToggle");
 
+    if (!button) return;
+
     if (isLight) {
         button.textContent = "Dark 🌙";
         button.setAttribute("aria-label", "Switch to dark mode");
@@ -255,14 +282,13 @@ function toggleTheme() {
     }
 }
 
-// Restore the previously selected theme when the page opens.
 try {
     applyTheme(localStorage.getItem("gradewise-theme") === "light");
 } catch (error) {
     applyTheme(false);
 }
 
-/* ===== Custom cursor movement ===== */
+/* Custom cursor movement */
 (() => {
     const finePointer = window.matchMedia(
         "(hover: hover) and (pointer: fine)"
@@ -338,20 +364,12 @@ try {
     });
 })();
 
-
-/* ===== Floating effect for all page sections ===== */
+/* Floating effect for page sections */
 (() => {
     const selector = [
-        "header",
-        "section",
-        "main",
-        "footer",
-        "article",
-        ".card",
-        ".calculator-card",
-        ".result-card",
-        ".stat-card",
-        ".subject-card"
+        "header", "section", "main", "footer", "article",
+        ".card", ".calculator-card", ".result-card",
+        ".stat-card", ".subject-card"
     ].join(",");
 
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -359,7 +377,6 @@ try {
     }
 
     document.querySelectorAll(selector).forEach((element) => {
-        // Avoid tilting layout containers (the stats grid is only a wrapper).
         if (
             element.matches("main, footer, .stats") ||
             element.offsetWidth > 1100 ||

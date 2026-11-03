@@ -1161,7 +1161,58 @@ body {
     transform: scale(0.93);
 }
 
-body.light-theme .theme-fab {
+body.light-theme .theme-fa
+
+/* ===== Branch and semester selectors ===== */
+.semester-setup-row {
+    flex-wrap: wrap;
+}
+
+.semester-setup-row .setup-field {
+    flex: 1 1 220px;
+    width: auto;
+}
+
+.semester-setup-row select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    font: inherit;
+    outline: none;
+}
+
+.semester-setup-row select option {
+    color: #1e1b4b;
+    background: #ffffff;
+}
+
+.manual-setup {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.manual-setup > p {
+    margin: 0 0 12px;
+    color: var(--glass-muted);
+    font-size: 13px;
+}
+
+.manual-setup .setup-field {
+    width: 180px;
+}
+
+@media (max-width: 600px) {
+    .semester-setup-row {
+        align-items: stretch;
+    }
+
+    .semester-setup-row .setup-field,
+    .manual-setup .setup-field {
+        width: 100%;
+    }
+}
+b {
     background: rgba(255, 255, 255, 0.8);
     border-color: rgba(139, 92, 246, 0.35);
     box-shadow:
@@ -1212,4 +1263,51 @@ body.light-theme .theme-fab {
 body:not(.light-theme) .theme-fab {
     color: #ffffff !important;
     opacity: 1 !important;
+}
+/* Rounded Liquid Glass dropdown */
+#branchSelect,
+#semesterSelect {
+    border-radius: 25px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: inherit;
+    outline: none;
+    cursor: pointer;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+/* Dropdown option styling */
+#branchSelect option,
+#semesterSelect option {
+    background: #24212e;
+    color: white;
+    padding: 12px;
+}
+/* Light mode - make table borders visible */
+body.light-theme table,
+body.light-theme th,
+body.light-theme td {
+    border-color: rgba(70, 70, 90, 0.25) !important;
+}
+
+body.light-theme th,
+body.light-theme td {
+    border: 1px solid rgba(70, 70, 90, 0.25);
+}
+/* Fix dropdown borders in Light Mode */
+body.light-theme #branchSelect,
+body.light-theme #semesterSelect {
+    border: 1.5px solid rgba(110, 75, 220, 0.35) !important;
+    background: rgba(255, 255, 255, 0.85);
+    color: #252b3a;
+    border-radius: 25px !important;
+}
+
+/* Visible border when selecting */
+body.light-theme #branchSelect:focus,
+body.light-theme #semesterSelect:focus {
+    border: 1.5px solid #8050f5 !important;
+    box-shadow: 0 0 12px rgba(128, 80, 245, 0.15);
 }

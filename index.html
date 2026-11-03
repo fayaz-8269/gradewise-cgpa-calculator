@@ -30,16 +30,38 @@
 
     <section class="card">
         <h2>⚙️ Set up your semester</h2>
-        <div class="setup-row">
+        <div class="setup-row semester-setup-row">
             <div class="setup-field">
-                <label for="subjectCount">NUMBER OF SUBJECTS</label>
-                <input type="number" id="subjectCount"
-                       min="1" max="30" step="1"
-                       placeholder="e.g. 6">
+                <label for="branchSelect">BRANCH</label>
+                <select id="branchSelect">
+    <option value="">Select Branch</option>
+    <option value="aiml">AIML</option>
+</select>
             </div>
-            <button class="primary" onclick="createTable()">
-                + Create Subjects
+            <div class="setup-field">
+                <label for="semesterSelect">SEMESTER</label>
+                <select id="semesterSelect">
+    <option value="">Select Semester</option>
+    <option value="5">5th Semester</option>
+</select>
+            </div>
+            <button class="primary" type="button" onclick="loadSemesterSubjects()">
+                Load Subjects →
             </button>
+        </div>
+        <div class="manual-setup">
+            <p>Or create a custom subject list</p>
+            <div class="setup-row">
+                <div class="setup-field">
+                    <label for="subjectCount">NUMBER OF SUBJECTS</label>
+                    <input type="number" id="subjectCount"
+                           min="1" max="30" step="1"
+                           placeholder="e.g. 6">
+                </div>
+                <button class="secondary" onclick="createTable()">
+                    + Create Manually
+                </button>
+            </div>
         </div>
         <div id="setupError" class="error" role="alert"></div>
     </section>
